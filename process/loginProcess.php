@@ -1,38 +1,73 @@
 <?php
-    // ini buat ngecek tombol yang namenya 'register' sudah di pencet atau belum
-    // $_POST itu method di formnya
-    if(isset($_POST['login'])){
+    require ('../verifemail/config.php');
+    
+    if(empty($_POST["email"]) && empty($_POST["password"])) {
+        echo"
+            <script type='text/javascript'>
+                alert('Email and Password is required');
+            </script>
+            <script>
+            window.location = '../page/loginPage.php'
+            </script>";
+    }else if(empty($_POST["email"])) {
+         echo"
+            <script type='text/javascript'>
+                alert('Email is required');
+            </script>
+            <script>
+            window.location = '../page/loginPage.php'
+            </script>";
+    }else if(empty($_POST["password"])) {
+        echo"
+            <script type='text/javascript'>
+                alert('Password is required');
+            </script>
+            <script>
+            window.location = '../page/loginPage.php'
+            </script>";
+    } else {
+            $email = $_POST['email'];
+    $password = $_POST['password'];
 
-        include('../db.php'); // untuk mengoneksikan dengan database dengan memanggil file db.php
-        //tampung nilai yang ada di from ke variable
-        // sesuaikan variabel name yang ada di registerPage.php disetiap input
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+    $sql = "SELECT * FROM users where email = '$email'";
+    $query = mysqli_query($con,$sql);
 
-        // Melakukan insert ke databse dengan query dibawah ini
-        $query = mysqli_query($con, "SELECT * FROM users WHERE username = '$username'") or die(mysqli_error($con));
-        // ini buat ngecek kalo misalnya hasil dari querynya == 0 ato ga ketemu -> usernamenya tdk ditemukan
-        if(mysqli_num_rows($query) == 0){
-            echo
-                '<script>alert("Username not found!"); window.location = "../page/loginPage.php"</script>';
-        }else{
-            $user = mysqli_fetch_assoc($query);
-            if(password_verify($password, $user['password'])){
-                // session adalah variabel global sementara yang disimpen di server
-                // buat mulai sessionnya pake session_start()
-                session_start();
-                //isLogin ini temp variable yang gunanya buat ngecek nanti apakah sdh login ato belum
-                $_SESSION['isLogin'] = true;
-                $_SESSION['user'] = $user;
-                echo
-                    '<script>alert("Login Success"); window.location = "../page/dashboardPage.php"</script>';
-            }else {
-                echo
-                    '<script>alert("Username or Password Invalid"); window.location = "../page/loginPage.php"</script>';
-            }
-        }
-    }else{
+    if(mysqli_num_rows($query) == 0 ){
         echo
-            '<script>window.history.back()</script>';
+            '<script>alert("Email not found!"); window.location = "../page/loginPage.php"</script>';
+    }else {
+        $user = mysqli_fetch_assoc($query);
+        if(password_verify($password,$user['password'])){
+
+            if($user['is_verified']==1){
+                if($user['email']=="admin") {
+                    session_start();
+                    $_SESSION['isLoginAdmin'] = true;
+                    $_SESSION['isLogin'] = false;
+                    $_SESSION['user'] = $user;
+                    $_SESSION['useremail'] = $email;
+                    echo
+                    '<script>alert("Login Success as admin"); window.location = "../page/dashboardAdminPage.php"</script>';
+                }
+                else {
+                    session_start();
+                    $_SESSION['isLogin'] = true;
+                    $_SESSION['isLoginAdmin'] = false;
+                    $_SESSION['user'] = $user;
+                    $_SESSION['useremail'] = $email;
+                    echo
+                    '<script>alert("Login Success as '.$user['nama'].'"); window.location = "../page/dashboardPenggunaPage.php"</script> ';
+                }
+            }
+            else {
+                echo
+                '<script>alert("Email Akun Ini Belum Terverifikasi"); window.location = "../page/loginPage.php"</script>'; 
+            }
+        }else {
+            echo
+            '<script>alert("Password Salah"); window.location = "../page/loginPage.php"</script>';
+        }
     }
+    }
+
 ?>

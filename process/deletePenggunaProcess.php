@@ -6,13 +6,13 @@
         if($queryDelete){
             echo
             '<script>
-            alert("Delete Success"); window.location = "../page/listMahasiswaPage.php"
+            alert("Hapus Pengguna Berhasil"); window.location = "../page/listPenggunaPage.php"
             </script>';
 
         }else{
             echo
             '<script>
-            alert("Delete Failed"); window.location = "../page/listMahasiswaPage.php"
+            alert("Hapus Pengguna Gagal"); window.location = "../page/listPenggunaPage.php"
             </script>';
         }
     }else {

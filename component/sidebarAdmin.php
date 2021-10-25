@@ -1,12 +1,10 @@
 <?php
     session_start();
-    if (!$_SESSION['isLogin']) {
+    if (!$_SESSION['isLoginAdmin']) {
         header("location: ../page/loginPage.php");
     }else {
         include('../db.php');
     }
-
-    
     echo '
         <!doctype html>
         <html lang="en">
@@ -31,7 +29,7 @@
                 }
 
                 .side-bar {
-                    width: 300px;
+                    width: 260px;
                     background-color: #000000;
                     min-height: 100vh;
                 }
@@ -75,19 +73,19 @@
                         <div class="menu">
                             <div class="content-menu" >
                                 <i class="fa fa-columns"></i>
-                                <a href="./dashboardPenggunaPage.php" style="font-weight:600">Dashboard</a>
+                                <a href="./dashboardAdminPage.php" style="font-weight:600" >Dashboard</a>
+                            </div>
+                            <div class="content-menu " >
+                                <i class="fa fa-list"></i>
+                                <a href="./listBarangPage.php" style="font-weight:600">List Barang</a>
                             </div>
                             <div class="content-menu">
-                                <i class="fa fa-list"></i>
-                                <a href="./listBarangPenggunaPage.php" style="font-weight:600">List Barang</a>
-                            </div>
-                            <div class="content-menu" >
-                                <i class="fa fa-user"></i>
-                                <a href="./readPage.php" style="font-weight:600" >Profil</a>
+                                <i class="fa fa-plus-square"></i>
+                                <a href="./listPenggunaPage.php" style="font-weight:600">List Pengguna</a>
                             </div>
                             <div class="content-menu" >
                                 <i class="fa fa-at"></i>
-                                <a href="./aboutPenggunaPage.php" style="font-weight:600" >About</a>
+                                <a href="./aboutAdminPage.php" style="font-weight:600" >About</a>
                             </div>
                             <div class="content-bottom " >
                                 <i class="fa fa-sign-out"></i>
@@ -97,5 +95,4 @@
                         </div>
                     </div>
     '
-
 ?>
