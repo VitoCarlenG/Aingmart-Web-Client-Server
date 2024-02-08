@@ -1,8 +1,8 @@
 <?php
     $host="localhost";
-    $user="aingmart_aingmart";
-    $pass="pandemi_789";
-    $name="aingmart_aingmart";
+    $user="root";
+    $pass="";
+    $name="aingmart";
 
     $con=mysqli_connect($host,$user,$pass,$name);
 
